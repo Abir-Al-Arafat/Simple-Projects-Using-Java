@@ -5,62 +5,19 @@ import java.util.Scanner;
 
 public class MortgageCalculator {
     public static void main(String[] args) {
-        // object of scanner class for input
-        Scanner input = new Scanner(System.in);
 
-        System.out.print("Principal: ");
-        // taking input from user
-        float principal = input.nextFloat();
+        // getting principal amount
+        int principal = (int) readNumber("Principal", 1000, 1_000_000);
 
-        // validating principal amount
-        while (principal < 1000 || principal > 1000000) {
-            System.out.println("Enter a number between 1,000 and 1,000,000");
-            System.out.print("Principal: ");
-            principal = input.nextFloat();
-        }
+        // getting annual interest rate
+        float annualInterest = (float) readNumber("Annual Interest rate", 1, 30);
 
-        // using nextLine method to read further inputs
-        input.nextLine();
-
-        System.out.print("Annual Interest Rate(%): ");
-        // taking input from user
-        float interestRate = input.nextFloat();
-
-        // validating interestRate amount
-        while (interestRate < 1 || interestRate >= 30) {
-            System.out.println("Enter a value between 1 to 30");
-            System.out.print("Annual Interest Rate(%): ");
-            interestRate = input.nextFloat();
-        }
-
-        // monthly interest
-        // dividing by 100 because input is given in percentage
-        interestRate = (interestRate / 100) / 12;
-
-        System.out.print("Period (Years): ");
-        // taking input from user
-        int period = input.nextInt();
-
-        // validating interestRate amount
-        while (period < 1 || period > 30) {
-            System.out.println("Enter a value between 1 to 30");
-            System.out.print("Period (Years): ");
-            interestRate = input.nextFloat();
-        }
-
-        // finding the number of times the amount is given to pay debt
-        period = period * 12;
+        // getting the number of years
+        byte years = (byte) readNumber("Years", 1, 30);
 
         // System.out.println(Math.pow(2, 3));
 
-        // mortgage formula:
-        // M = p*r*(1+r)^n / (a+r)^n - 1
-
-        // p*r*(1+r)^n
-        float mortgage = principal * interestRate * (float) Math.pow((1 + interestRate), period);
-
-        // (a+r)^n - 1
-        mortgage = mortgage / ((float) Math.pow((1 + interestRate), period) - 1);
+        double mortgage = calculateMortgage(principal, annualInterest, years);
 
         // getting currency instance
         NumberFormat currency = NumberFormat.getCurrencyInstance();
@@ -69,5 +26,61 @@ public class MortgageCalculator {
         String result = currency.format(mortgage);
 
         System.out.println("Mortgage: " + result);
+
+        // B = L[(1+c)^n - (1+c)^p] / [(1+c)^n - 1]
+        // L = loan/principle
+        // c = monthly interest
+        // n = number of payments
+
+        // float monthlyInterest = (annualInterest / 100) / 12;
+        // int number0fPayments = years * 12;
+
+        // double paymentLeft = (double) (principal
+        // * (Math.pow(1 + monthlyInterest, number0fPayments)
+        // - Math.pow(1 + monthlyInterest, number0fPaymentsMade)));
+
+        // paymentLeft = paymentLeft / (Math.pow((1 + monthlyInterest),
+        // number0fPayments) - 1);
+
+        // System.out.println("payment left: " + paymentLeft);
+    }
+
+    public static double calculateMortgage(float principal, float annualInterest, byte years) {
+        // monthly interest
+        // dividing by 100 because input is given in percentage
+        float monthlyInterest = (annualInterest / 100) / 12;
+
+        // finding the number of times the amount is given to pay debt
+        short numberOfPayments = (short) (years * 12);
+
+        // mortgage formula:
+        // M = p*r*(1+r)^n / (a+r)^n - 1
+
+        // p*r*(1+r)^n
+        double mortgage = principal * monthlyInterest * (float) Math.pow((1 + monthlyInterest), numberOfPayments);
+
+        // (a+r)^n - 1
+        mortgage = mortgage / ((float) Math.pow((1 + monthlyInterest), numberOfPayments) - 1);
+
+        return mortgage;
+    }
+
+    public static double readNumber(String prompt, double min, double max) {
+        // object of scanner class for input
+        Scanner input = new Scanner(System.in);
+
+        // declaring variable to keep input
+        Double value;
+
+        // validating the input
+        while (true) {
+            System.out.print(prompt + ": ");
+            value = input.nextDouble();
+            if (value >= min && value <= max) {
+                break;
+            }
+            System.out.println("Insert a value between " + min + " and " + max);
+        }
+        return value;
     }
 }
