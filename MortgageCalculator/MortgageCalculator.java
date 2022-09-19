@@ -27,22 +27,44 @@ public class MortgageCalculator {
 
         System.out.println("Mortgage: " + result);
 
+        // for loop to print the amount that is left to pay
+        for (short month = 1; month <= years * 12; month++) {
+            // returning the amount left to pay after the payment
+            double balance = calculateBalance(principal, annualInterest, years, month);
+
+            // printing the amount left to pay
+            System.out.print("Payment left after month " + month + ": ");
+            System.out.println(currency.format(balance));
+        }
+
+    }
+
+    // gives balance after a specific month
+    public static double calculateBalance(int principal, float annualInterest, byte years, short number0fPaymentsMade) {
+        // monthly interest
+        // dividing by 100 because input is given in percentage
+        float monthlyInterest = (annualInterest / 100) / 12;
+
+        // finding the number of times the amount is given to pay debt
+        float numberOfPayments = (short) (years * 12);
+
+        // formula:
         // B = L[(1+c)^n - (1+c)^p] / [(1+c)^n - 1]
         // L = loan/principle
         // c = monthly interest
         // n = number of payments
+        // p = payment made/paid
 
-        // float monthlyInterest = (annualInterest / 100) / 12;
-        // int number0fPayments = years * 12;
+        // L[(1+c)^n - (1+c)^p]
+        double paymentLeft = (double) (principal
+                * (Math.pow(1 + monthlyInterest, numberOfPayments)
+                        - Math.pow(1 + monthlyInterest, number0fPaymentsMade)));
 
-        // double paymentLeft = (double) (principal
-        // * (Math.pow(1 + monthlyInterest, number0fPayments)
-        // - Math.pow(1 + monthlyInterest, number0fPaymentsMade)));
+        // [(1+c)^n - 1]
+        paymentLeft = paymentLeft / (Math.pow((1 + monthlyInterest),
+                numberOfPayments) - 1);
 
-        // paymentLeft = paymentLeft / (Math.pow((1 + monthlyInterest),
-        // number0fPayments) - 1);
-
-        // System.out.println("payment left: " + paymentLeft);
+        return paymentLeft;
     }
 
     public static double calculateMortgage(float principal, float annualInterest, byte years) {
@@ -83,4 +105,5 @@ public class MortgageCalculator {
         }
         return value;
     }
+
 }
