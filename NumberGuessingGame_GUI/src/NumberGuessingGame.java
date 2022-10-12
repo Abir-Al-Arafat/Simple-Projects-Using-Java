@@ -1,10 +1,14 @@
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class NumberGuessingGame extends JFrame {
 	//text field for input	
@@ -17,6 +21,7 @@ public class NumberGuessingGame extends JFrame {
 	private int randomNumber;
 	
 	public NumberGuessingGame() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
 		
 		JLabel lblTitle = new JLabel("Number Guessing Game");
@@ -36,6 +41,12 @@ public class NumberGuessingGame extends JFrame {
 		textFieldInput.setColumns(10);
 		
 		JButton btnGuess = new JButton("Guess");
+		btnGuess.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				checkGuess();
+			}
+		});
+		
 		btnGuess.setBounds(175, 134, 89, 23);
 		getContentPane().add(btnGuess);
 		
@@ -67,12 +78,23 @@ public class NumberGuessingGame extends JFrame {
 		else {
 			message = "Congrats.. Correct Answer!!";
 			lblOutput.setText(message);
+			//function to generate another random number so that a new game can be started		
+			newGame();
 		}
 		
+	}
+	
+	//method to create a new game
+	public void newGame() {
+		//keeping random number in a variable		
+		randomNumber = (int)(Math.random()*100 + 1);
 	}
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		System.out.println("hey");
+		NumberGuessingGame game = new NumberGuessingGame();
+		game.newGame();
+		game.setSize(new Dimension(450, 350));
+		game.setVisible(true);
 	}
 }
