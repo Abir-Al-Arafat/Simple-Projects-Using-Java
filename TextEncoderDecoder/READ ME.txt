@@ -1,0 +1,6 @@
+Encoding Decoding Program:
+1. User can enter texts to encode or decode
+2. Caesar cipher technique is used to encode or decode texts
+3. After entering a text, the user can set a key to encode or decode the text 
+	Example: If 6 is set as the key to encode, then the opposite of 6 which is -6
+	will be used to decode the texts

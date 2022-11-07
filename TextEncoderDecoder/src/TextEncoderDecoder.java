@@ -5,16 +5,30 @@ import java.util.Scanner;
 public class TextEncoderDecoder {
 
 	public static void main(String[] args) {
-		System.out.println("Enter a text to encode or decode: ");
+		//program will run until the user stops giving input		
+		while(true) {
+		
+		System.out.println("Enter a text to encode or decode (Hit enter to stop the program): ");
 		//taking input		
 		Scanner scan = new Scanner(System.in);
+		//storing input 		
 		String text = scan.nextLine();
+		
+		//program stops when "enter" key is hit		
+		if (text.length() <= 0) {
+			break;
+		}
 		
 		//output
 		String out = "";
 		
-		//ASCII interval
-		char key = 13;
+		System.out.print("Enter an inteval key (-26 to 26): ");
+		
+		//taking interval key input
+		int keyInput = Integer.parseInt(scan.nextLine());
+		
+		//type casting to char
+		char key = (char)(keyInput);
 		
 		//empty char for ASCII value
 		char ascii = ' ';
@@ -27,10 +41,16 @@ public class TextEncoderDecoder {
 			if (ascii >= 'A' && ascii <='Z') {
 				//adding interval for encoding/decoding				
 				ascii+=key;
+				
 				//checking if interval is going out of bound
 				if (ascii > 'Z') {
 					//subtract 26 if interval goes out of bound					
-					ascii -= key*2;
+					ascii -= 26;
+				}
+				
+				if (ascii < 'A') {
+					//add 26 if interval goes out of bound					
+					ascii += 26;
 				}
 			}
 			
@@ -38,10 +58,33 @@ public class TextEncoderDecoder {
 			if (ascii >= 'a' && ascii <='z') {
 				//adding interval for encoding/decoding				
 				ascii+=key;
+				
 				//checking if interval is going out of bound
 				if (ascii > 'z') {
 					//subtract 26 if interval goes out of bound					
-					ascii -= key*2;
+					ascii -= 26;
+				}
+				
+				if (ascii < 'a') {
+					//add 26 if interval goes out of bound					
+					ascii += 26;
+				}
+			}
+			
+			//checking numbers
+			if (ascii >= '0' && ascii <= '9') {
+				//adding interval for encoding/decoding				
+				ascii+=key;
+				
+				//checking if interval is going out of bound
+				if (ascii > '9') {
+					//subtract 9 if interval goes out of bound					
+					ascii -= 9;
+				}
+				
+				if (ascii < '0') {
+					//add 9 if interval goes out of bound					
+					ascii += 9;
 				}
 			}
 			
@@ -50,7 +93,8 @@ public class TextEncoderDecoder {
 		}
 		
 		System.out.println(out);
-		
+		}
+		System.out.println("Program Stopped");
 	}
 
 }
